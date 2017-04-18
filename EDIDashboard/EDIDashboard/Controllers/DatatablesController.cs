@@ -32,8 +32,13 @@ namespace EDIDashboard.Controllers
             var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
             //find search columns info
             var tradingPartnerName = Request.Form.GetValues("columns[3][search][value]").FirstOrDefault();
+            var transactionSetID = Request.Form.GetValues("columns[4][search][value]").FirstOrDefault();
+            var originalFileName = Request.Form.GetValues("columns[6][search][value]").FirstOrDefault();
+            var uniqueID = Request.Form.GetValues("columns[1][search][value]").FirstOrDefault();
+            var bpID = Request.Form.GetValues("columns[2][search][value]").FirstOrDefault();
+            var createDate = Request.Form.GetValues("columns[0][search][value]").FirstOrDefault();
             var direction = Request.Form.GetValues("columns[5][search][value]").FirstOrDefault();
-
+            var dropDownTradingParter = Request.Form.GetValues("columns[3][search][value]").FirstOrDefault();
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt16(start) : 0;
             int recordsTotal = 0;
@@ -49,10 +54,40 @@ namespace EDIDashboard.Controllers
                 {
                     v = v.Where(a => a.TPName.Contains(tradingPartnerName));
                 }
+                if (!string.IsNullOrEmpty(transactionSetID))
+                {
+                    v = v.Where(a => a.TransactionSetID.Contains(transactionSetID));
+                }
+                if (!string.IsNullOrEmpty(originalFileName))
+                {
+                    v = v.Where(a => a.OriginalFileName.Contains(originalFileName));
+                }
+
+                if (!string.IsNullOrEmpty(uniqueID))
+                {
+                    v = v.Where(a => a.UniqueID.Contains(uniqueID));
+                }
+
+                if (!string.IsNullOrEmpty(bpID))
+                {
+                    v = v.Where(a => a.BPID.ToString().Contains(bpID));
+                }
+
+                if (!string.IsNullOrEmpty(createDate))
+                {
+                    v = v.Where(a => a.CreateDate.ToString().Contains(createDate));
+                }
+
+
                 if (!string.IsNullOrEmpty(direction))
                 {
                     v = v.Where(a => a.Direction == direction);
                 }
+                if (!string.IsNullOrEmpty(dropDownTradingParter))
+                {
+                    v = v.Where(a => a.TPName == dropDownTradingParter);
+                }
+
                 //SORTING...  (For sorting we need to add a reference System.Linq.Dynamic)
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
                 {
@@ -79,6 +114,6 @@ namespace EDIDashboard.Controllers
             */
         }
 
-      
+
     }
 }
